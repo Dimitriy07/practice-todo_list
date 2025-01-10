@@ -1,19 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import generateUniqueId from "generate-unique-id";
-
-interface Task {
-  id: string;
-  task: string;
-  isDone: boolean;
-}
+import { Task } from "../types/task";
 
 interface InputRowProps {
-  onAddTask: (tasks: Task[]) => void;
-  tasks: Task[];
+  onAddTask: (task: Task) => void;
 }
 
-function InputRow({ onAddTask, tasks }: InputRowProps) {
+function InputRow({ onAddTask }: InputRowProps) {
   const [input, setInput] = useState("");
 
   const ref = useRef<HTMLInputElement>(null);
@@ -30,9 +24,8 @@ function InputRow({ onAddTask, tasks }: InputRowProps) {
       task: input,
       isDone: false,
     };
-    onAddTask([...tasks, newTask]);
+    onAddTask(newTask);
     setInput("");
-
   }
   return (
     <form

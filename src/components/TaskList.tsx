@@ -1,49 +1,44 @@
-interface Task {
-  id: string;
-  task: string;
-  isDone: boolean;
-}
+import { Task } from "../types/task";
 
 interface TasksProps {
   tasks: Task[];
   onToggleTask: (id: string) => void;
+  onDeleteTask: (id: string) => void;
 }
 
-function TaskList({ tasks, onToggleTask }: TasksProps) {
+function TaskList({ tasks, onToggleTask, onDeleteTask }: TasksProps) {
+  const incompleteTasks = tasks.filter((task) => !task.isDone);
+  const completedTasks = tasks.filter((task) => task.isDone);
   return (
     <>
       <ul className=" border-b border-ocean-100 pb-3">
-        {tasks.map(
-          (task) =>
-            task.isDone === false && (
-              <li key={task.id}>
-                <input
-                  type="checkbox"
-                  checked={task.isDone}
-                  onChange={() => onToggleTask(task.id)}
-                />
-                <span className="text-ocean-900 ml-2">{task.task}</span>
-              </li>
-            )
-        )}
+        {incompleteTasks.map((task) => (
+          <li key={task.id}>
+            <input
+              type="checkbox"
+              checked={task.isDone}
+              onChange={() => onToggleTask(task.id)}
+            />
+            <span className="text-ocean-900 ml-2">{task.task}</span>
+            <button onClick={() => onDeleteTask(task.id)}>❌</button>
+          </li>
+        ))}
       </ul>
       <div className="text-ocean-500">Tasks Completed</div>
       <ul>
-        {tasks.map(
-          (task) =>
-            task.isDone === true && (
-              <li key={task.id}>
-                <input
-                  type="checkbox"
-                  checked={task.isDone}
-                  onChange={() => onToggleTask(task.id)}
-                />
-                <span className="line-through text-ocean-400 ml-2">
-                  {task.task}
-                </span>
-              </li>
-            )
-        )}
+        {completedTasks.map((task) => (
+          <li key={task.id}>
+            <input
+              type="checkbox"
+              checked={task.isDone}
+              onChange={() => onToggleTask(task.id)}
+            />
+            <span className="line-through text-ocean-400 ml-2">
+              {task.task}
+            </span>
+            <button onClick={() => onDeleteTask(task.id)}>❌</button>
+          </li>
+        ))}
       </ul>
     </>
   );
